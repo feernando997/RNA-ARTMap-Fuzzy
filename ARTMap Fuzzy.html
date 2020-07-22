@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ARTMAP-FUZZY</title>
+		<h2>ARTMap Fuzzy</h2>
+		<p>Parâmetros da Rede:</p>
+		<script>
+			//Variaveis principais
+			var i = 0
+			var j = 0
+			var pa = 0.95
+			var pb = 1
+			var pab = 0.95
+			var alfa = 0.1
+			var beta = 1
+			var fase = 0
+
+			var wab = [ [1,1,1], [1,1,1], [1,1,1] ]
+			var ya = [ [0,0,0], [0,0,0], [0,0,0] ]
+			var yb = [ [0,0,0], [0,0,0], [0,0,0] ]
+			// [ [0,0], [0,0], [0,0] ]
+
+			//Exibição de valores
+			document.write("Pa: " + pa + "<br>")
+			document.write("Pb: " + pb + "<br>")
+			document.write("Pab: " + pab + "<br>")
+			document.write("Alfa: " + alfa + "<br>")
+			document.write("Beta: " + beta + "<br>")
+			document.write("<br>")
+
+			//_______________ ART B _______________//
+
+			var wb = [ [1,1],[1,1],[1,1] ]
+			var b = [1,0,1]
+
+			//Normalização (caso valores < 0 e > 1)
+			let somaEntradaB = 0
+
+			for(i=0; i<3; i++){
+				somaEntradaB += b[i]  	
+			}
+
+			let normalizaB = false
+
+			for(i=0; i<3; i++){
+				if(b[i] < 0 || b[i] > 1){
+					normalizaB = true
+				}	
+			}
+
+			if (normalizaB){
+				for(i=0; i<3; i++)
+					b[i] /= somaEntradaB 
+			}
+
+			//Complemento (1 - b)
+			var complementoB = [ [0,0], [0,0], [0,0] ]  
+			let auxB = [0,0,0]
+
+			for(i=0; i<3; i++){
+				auxB[i] = 1 - b[i]	
+			}
+
+			for(i=0; i<3; i++){
+				complementoB[i][0] = b[i] 
+				complementoB[i][1] = auxB[i]
+			}	
+
+			//_______________ ART A _______________//
+
+			var wa = [ [1,1,1,1], [1,1,1,1], [1,1,1,1] ]
+			var a = [ [1,0], [0,1], [0.5, 0.5] ]
+
+			//Normalização (caso valores < 0 e > 1)
+			let somaEntradaA = 0
+
+			for(i=0; i<3; i++){
+				for(j=0; j<2; j++){
+					somaEntradaA += a[i][j]
+				}
+			}
+
+			let normalizaA = false
+
+			for(i=0; i<3; i++){
+				for(j=0; j<2; j++){
+					if(a[i][j] < 0 || a[i][j] > 1){
+						normalizaA = true
+					}
+				}
+			}
+
+			if(normalizaA){
+				for(i=0; i<3; i++){
+					for(j=0; j<2; j++){
+						a[i][j] /= somaEntradaA	
+					}
+				}
+			}
+
+			//Complemento (1 - a)
+			let auxA = [ [0,0], [0,0], [0,0] ]
+			let complementoA = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
+
+			for(i=0; i<3; i++){
+				for(j=0; j<2; j++){
+					auxA[i][j] = 1 - a[i][j]
+				}
+			}
+
+			for(i=0; i<3; i++){
+				for(j=0; j<2; j++){
+					complementoA[i][j] = a[i][j]
+				}
+			}
+
+			for(i=0; i<3; i++){
+				for(j=2; j<4; j++){
+					complementoA[i][j] = auxA[i][j-2]
+				}
+			}
+
+		</script>
+	</head>
+
+	<body>
+		<script>
+			//_______________ ART B _______________//
+
+			//Treinamento
+			
+			let matB  = [ [0,0], [0,0], [0,0] ]
+			let somaCB = [0,0,0]
+			let somaPesoB = [0,0,0]
+			let Tb = [0,0,0]
+			let x = 0, y = 0, k = 0
+
+			for(i=0; i<3; i++){
+	
+				//Prepara soma dos pesos
+				somaPesoB[0] = 0
+				somaPesoB[1] = 0
+				somaPesoB[2] = 0
+
+				//Prepara soma da matriz And
+				for(x=0; x<3; x++)
+					somaCB[x] = 0
+
+				//And Categorias
+				for(x=0; x<3; x++){
+					for(j=0; j<2; j++){
+						if(complementoB[i][j] < wb[x][j]){
+							matB[x][j] = complementoB[i][j]
+						}else{
+							matB[x][j] = wb[x][j]
+						}
+						somaCB[x] += matB[x][j]
+					}
+				}
+					
+				//Soma colunas Peso
+				for(x=0; x<3; x++){
+					for(j=0; j<2; j++){
+						somaPesoB[x] += wb[x][j]
+					}
+				}
+	
+				/*console.log("Soma coluna AND: ")
+				console.log(somaCB)
+				console.log("Soma coluna peso WB: ")
+				console.log(somaPesoB)*/
+
+				//Cria as categorias
+				for(x=0; x<3; x++){
+					Tb[x] = somaCB[x] / (alfa + somaPesoB[x])
+				}
+				//console.log("Categorias criadas: ")
+				//console.log(Tb)
+
+				//Encontra categoria vencedora
+				let maiorB = Math.max(...Tb)
+				let K = Tb.indexOf(maiorB)
+				//console.log("Categoria Vencedora " + i + ": " + K)
+
+				//Teste de vigilancia
+				let vigilanciaB = [ [0,0], [0,0], [0,0] ]
+
+				for(j=0; j<2; j++){
+					if(complementoB[K][j] < wb[K][j])
+						vigilanciaB[i][j] = complementoB[K][j]
+					else
+						vigilanciaB[i][j] = wb[K][j]
+				}
+
+				let somaVig = [0,0,0]
+				let somaB = [0,0,0]
+
+				for(j=0; j<2; j++){
+					somaVig[i] += vigilanciaB[i][j]
+					somaB[i] += complementoB[i][j]
+				}
+				
+				let tVigilanciaB = [0,0,0]
+
+				tVigilanciaB[i] = somaVig[i] / somaB[i]
+				//console.log("Teste de vigilancia " + i + ": " + tVigilancia)
+
+				//Valida Vigilancia
+				while(tVigilanciaB[i] < pb){
+					
+					//Recria categorias
+					Tb[K] = 0
+					maiorB = Math.max(...Tb)
+					K = Tb.indexOf(maiorB)
+					//console.log("Nova categoria vencedora " + i + ": " + K)
+
+					//Teste Vigilancia
+					for(j=0; j<2; j++){
+						if(complementoB[K][j] < wb[K][j]){
+							vigilanciaB[i][j] = complementoB[K][j]
+						}else{
+							vigilanciaB[i][j] = wb[K][j]
+						}
+					}
+					somaVig = [0,0,0]
+					somaB = [0,0,0]
+
+					for(j=0; j<2; j++){
+						somaVig[i] += vigilanciaB[i][j]
+						somaB[i] += complementoB[i][j]
+					}
+					tVigilanciaB = [0,0,0]
+
+					tVigilanciaB[i] = somaVig[i] / somaB[i]
+					//console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
+	
+				}//Fim While
+
+				//Atualiza o peso Wb
+				for(j=0; j<2; j++){
+					wb[K][j] = beta * matB[i][j] + (1 - beta) * wb[K][j] 
+				}
+
+				//Matriz de Atividades B
+				yb[i][K] = 1
+
+				Tb = []
+
+			}//Fim for art B
+				
+			/*console.log("Matriz do AND B:")
+			console.log(matB)
+			console.log("WB Atualizado: ")
+			console.log(wb)
+			console.log("Matriz de Atividades B:")
+			console.log(yb)*/
+
+			console.log('\n')
+
+			//_______________ ART A _______________//
+
+			let matA  = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
+			let somaCA = [0,0,0]
+			let somaPesoA = [0,0,0]
+			let Ta = [0,0,0]
+
+			for(i=0; i<3; i++){
+
+				//Prepara soma dos pesos
+				somaPesoA[0] = 0
+				somaPesoA[1] = 0
+				somaPesoA[2] = 0
+
+				//Prepara soma da matriz And
+				for(x=0; x<3; x++)
+					somaCA[x] = 0
+
+				//And Categorias
+				for(x=0; x<3; x++){
+					for(j=0; j<4; j++){
+						if(complementoA[i][j] < wa[x][j]){
+							matA[x][j] = complementoA[i][j]
+						}else{
+							matA[x][j] = wa[x][j]
+						}
+						somaCA[x] += matA[x][j]
+					}
+				}
+					
+				//Soma colunas Peso
+				for(x=0; x<3; x++){
+					for(j=0; j<4; j++){
+						somaPesoA[x] += wa[x][j]
+					}
+				}
+	
+				console.log("Soma coluna AND A: ")
+				console.log(somaCA)
+				console.log("Soma coluna peso WA: ")
+				console.log(somaPesoA)
+
+				//Cria as categorias
+				for(x=0; x<3; x++){
+					Ta[x] = somaCA[x] / (alfa + somaPesoA[x])
+				}
+				console.log("Categorias criadas A: ")
+				console.log(Ta)
+
+				//Encontra categoria vencedora
+				let maiorA = Math.max(...Ta)
+				let J = Ta.indexOf(maiorA)
+				console.log("Categoria vencedora A " + i + ": " + J)
+
+				//Teste de vigilancia
+				let vigilanciaA = [ [0,0,0,0], [0,0,0,0], [0,0,0] ]
+
+				for(j=0; j<4; j++){
+					if(complementoA[J][j] < wa[J][j]){
+						vigilanciaA[i][j] = complementoA[J][j]
+					}else{
+						vigilanciaA[i][j] = wa[J][j]
+					}
+				}
+
+				let somaVigA = [0,0,0]
+				let somaA = [0,0,0]
+
+				for(j=0; j<4; j++){
+					somaVigA[i] += vigilanciaA[i][j]
+					somaA[i] += complementoA[i][j]
+				}
+
+				let tVigilanciaA = [0,0,0]
+
+				tVigilanciaA[i] = somaVigA[i] / somaA[i]
+				console.log("Teste de vigilancia A " + i + ": " + tVigilanciaA)
+
+				//Match Tracking
+				var mt = [ [0,0,0], [0,0,0], [0,0,0] ]
+
+				for(x=0; x<3; x++){
+					for(j=0; j<3; j++){
+						if(yb[x][j] < wab[J][j]){
+							mt[x][j] = yb[x][j]
+						}else{
+							mt[x][j] = wab[J][j]
+						}	
+					}
+				}
+
+				let somaMt = [0,0,0]
+				let somaYb = [0,0,0]
+				
+				for(x=0; x<3; x++){
+					for(j=0; j<3; j++){
+						somaMt[x] += mt[x][j]
+						somaYb[x] += yb[x][j]
+					}
+				}
+
+				let validaMatch = [0,0,0]
+
+				validaMatch[i] = somaMt[i] / somaYb[i]
+				console.log("Match Tracking " + i + ": " + validaMatch)
+
+				//Valida o Match Tracking
+				while(validaMatch[i] < pab){
+
+					//Categorias
+					Ta[J] = 0
+					maiorA = Math.max(...Ta)
+					J = Ta.indexOf(maiorA)
+					console.log("Nova categoria vencedora A " + i + ": " + J)
+
+					//Teste de vigilancia
+					vigilanciaA = [ [0,0,0,0], [0,0,0,0], [0,0,0] ]
+
+					for(j=0; j<4; j++){
+						if(complementoA[J][j] < wa[J][j]){
+							vigilanciaA[i][j] = complementoA[J][j]
+						}else{
+							vigilanciaA[i][j] = wa[J][j]
+						}
+					}
+
+					somaVigA = [0,0,0]
+					somaA = [0,0,0]
+
+					for(j=0; j<4; j++){
+						somaVigA[i] += vigilanciaA[i][j]
+						somaA[i] += complementoA[i][j]
+					}
+
+					tVigilanciaA = [0,0,0]
+
+					tVigilanciaA[i] = somaVigA[i] / somaA[i]
+					console.log("Novo teste de vigilancia A " + i + ": " + tVigilanciaA)
+
+					//Valida Vigilancia
+					while(tVigilanciaA[i] < pa){
+						
+						//Recria categorias
+						Ta[J] = 0
+						maiorA = Math.max(...Ta)
+						J = Ta.indexOf(maiorA)
+						console.log("Nova categoria vencedora " + i + ": " + J)
+
+						//Teste Vigilancia
+						for(j=0; j<4; j++){
+							if(complementoA[J][j] < wa[J][j]){
+								vigilanciaA[i][j] = complementoA[J][j]
+							}else{
+								vigilanciaA[i][j] = wa[J][j]
+							}
+						}
+					
+						somaVigA = [0,0,0]
+						somaA = [0,0,0]
+
+						for(j=0; j<4; j++){
+							somaVigA[i] += vigilanciaA[i][j]
+							somaA[i] += complementoA[i][j]
+						}
+
+						tVigilanciaA = [0,0,0]
+
+						tVigilanciaA[i] = somaVigA[i] / somaA[i]
+						console.log("Valida teste de vigilancia A" + i + ": " + tVigilanciaA)
+		
+					}//Fim While Vigilancia
+
+					//Refaz o match tracking
+				    mt = [ [0,0,0], [0,0,0], [0,0,0] ]
+
+					for(x=0; x<3; x++){
+						for(j=0; j<3; j++){
+							if(yb[x][j] < wab[J][j]){
+								mt[x][j] = yb[x][j]
+							}else{
+								mt[x][j] = wab[J][j]
+							}	
+						}
+					}
+
+					somaMt = [0,0,0]
+					somaYb = [0,0,0]
+
+					for(x=0; x<3; x++){
+						for(j=0; j<3; j++){
+							somaMt[x] += mt[x][j]
+							somaYb[x] += yb[x][j]
+						}
+					}
+
+					validaMatch = [0,0,0]
+
+					validaMatch[i] = somaMt[i] / somaYb[i]
+					console.log("Valida match tracking " + i + ": " + validaMatch)
+
+				}//Fim do while Match
+
+				//Atualiza o peso Wa
+				for(j=0; j<4; j++){
+					wa[J][j] = beta * matA[i][j] + (1 - beta) * wa[J][j] 
+				}
+
+			}//Fim for art A
+
+			/*console.log("Matriz do AND A:")
+			console.log(matA)
+			console.log("Match Tracking:")
+			console.log(mt)
+			console.log("WA Atualizado: ")
+			console.log(wa)
+			console.log("Matriz de Atividades A:")
+			console.log(ya)*/
+
+			console.log('\n')
+
+			//_______________ DIAGNOSTICO _______________//
+
+		</script>
+	</body>
+</html>
