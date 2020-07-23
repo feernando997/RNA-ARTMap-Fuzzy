@@ -128,6 +128,8 @@
 		<script>
 			//_______________ ART B _______________//
 
+			console.log("_______________ ART B _______________")
+
 			//Treinamento
 			
 			let matB  = [ [0,0], [0,0], [0,0] ]
@@ -167,25 +169,25 @@
 					}
 				}
 	
-				/*console.log("Soma coluna AND: ")
+				console.log("Soma coluna AND: ")
 				console.log(somaCB)
 				console.log("Soma coluna peso WB: ")
-				console.log(somaPesoB)*/
+				console.log(somaPesoB)
 
 				//Cria as categorias
 				for(x=0; x<3; x++){
 					Tb[x] = somaCB[x] / (alfa + somaPesoB[x])
 				}
-				//console.log("Categorias criadas: ")
-				//console.log(Tb)
+				console.log("Categorias criadas: ")
+				console.log(Tb)
 
 				//Encontra categoria vencedora
 				let maiorB = Math.max(...Tb)
 				var K = Tb.indexOf(maiorB)
-				//console.log("Categoria Vencedora " + i + ": " + K)
+				console.log("Categoria Vencedora " + i + ": " + K)
 				
 				posiK[i] = K
-				//console.log(posiK)
+				console.log(posiK)
 
 				//Teste de vigilancia
 				let vigilanciaB = [ [0,0], [0,0], [0,0] ]
@@ -197,18 +199,18 @@
 						vigilanciaB[i][j] = wb[K][j]
 				}
 
-				let somaVig = [0,0,0]
+				let somaVigB = [0,0,0]
 				let somaB = [0,0,0]
 
 				for(j=0; j<2; j++){
-					somaVig[i] += vigilanciaB[i][j]
+					somaVigB[i] += vigilanciaB[i][j]
 					somaB[i] += complementoB[i][j]
 				}
 				
 				let tVigilanciaB = [0,0,0]
 
-				tVigilanciaB[i] = somaVig[i] / somaB[i]
-				//console.log("Teste de vigilancia " + i + ": " + tVigilancia)
+				tVigilanciaB[i] = somaVigB[i] / somaB[i]
+				console.log("Teste de vigilancia " + i + ": " + tVigilanciaB)
 
 				//Valida Vigilancia
 				while(tVigilanciaB[i] < pb){
@@ -217,7 +219,7 @@
 					Tb[K] = 0
 					maiorB = Math.max(...Tb)
 					K = Tb.indexOf(maiorB)
-					//console.log("Nova categoria vencedora " + i + ": " + K)
+					console.log("Nova categoria vencedora " + i + ": " + K)
 
 					//Teste Vigilancia
 					for(j=0; j<2; j++){
@@ -227,17 +229,17 @@
 							vigilanciaB[i][j] = wb[K][j]
 						}
 					}
-					somaVig = [0,0,0]
+					somaVigB = [0,0,0]
 					somaB = [0,0,0]
 
 					for(j=0; j<2; j++){
-						somaVig[i] += vigilanciaB[i][j]
+						somaVigB[i] += vigilanciaB[i][j]
 						somaB[i] += complementoB[i][j]
 					}
 					tVigilanciaB = [0,0,0]
 
 					tVigilanciaB[i] = somaVig[i] / somaB[i]
-					//console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
+					console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
 	
 				}//Fim While
 
@@ -253,16 +255,19 @@
 
 			}//Fim for art B
 				
-			/*console.log("Matriz do AND B:")
+			console.log("Matriz do AND B:")
 			console.log(matB)
 			console.log("WB Atualizado: ")
 			console.log(wb)
 			console.log("Matriz de Atividades B:")
-			console.log(yb)*/
+			console.log(yb)
 
+			console.log('\n')
 			console.log('\n')
 
 			//_______________ ART A _______________//
+
+			console.log("_______________ ART A _______________")
 
 			let matA  = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
 			let somaCA = [0,0,0]
@@ -299,10 +304,10 @@
 					}
 				}
 	
-				/*console.log("Soma coluna AND A: ")
+				console.log("Soma coluna AND A: ")
 				console.log(somaCA)
 				console.log("Soma coluna peso WA: ")
-				console.log(somaPesoA)*/
+				console.log(somaPesoA)
 
 				//Cria as categorias
 				for(x=0; x<3; x++){
@@ -338,7 +343,7 @@
 				let tVigilanciaA = [0,0,0]
 
 				tVigilanciaA[i] = somaVigA[i] / somaA[i]
-				//console.log("Teste de vigilancia A " + i + ": " + tVigilanciaA)
+				console.log("Teste de vigilancia A " + i + ": " + tVigilanciaA)
 
 				//Match Tracking
 				var mt = [ [0,0,0], [0,0,0], [0,0,0] ]
@@ -366,7 +371,7 @@
 				let validaMatch = [0,0,0]
 
 				validaMatch[i] = somaMt[i] / somaYb[i]
-				//console.log("Match Tracking " + i + ": " + validaMatch)
+				console.log("Match Tracking " + i + ": " + validaMatch)
 
 				//Valida o Match Tracking
 				while(validaMatch[i] < pab){
@@ -375,7 +380,7 @@
 					Ta[J] = 0
 					maiorA = Math.max(...Ta)
 					J = Ta.indexOf(maiorA)
-					//console.log("Nova categoria vencedora A " + i + ": " + J)
+					console.log("Nova categoria vencedora A " + i + ": " + J)
 
 					//Teste de vigilancia
 					vigilanciaA = [ [0,0,0,0], [0,0,0,0], [0,0,0] ]
@@ -399,7 +404,7 @@
 					tVigilanciaA = [0,0,0]
 
 					tVigilanciaA[i] = somaVigA[i] / somaA[i]
-					//console.log("Novo teste de vigilancia A " + i + ": " + tVigilanciaA)
+					console.log("Novo teste de vigilancia A " + i + ": " + tVigilanciaA)
 
 					//Valida Vigilancia
 					while(tVigilanciaA[i] < pa){
@@ -408,7 +413,7 @@
 						Ta[J] = 0
 						maiorA = Math.max(...Ta)
 						J = Ta.indexOf(maiorA)
-						//console.log("Nova categoria vencedora " + i + ": " + J)
+						console.log("Nova categoria vencedora " + i + ": " + J)
 
 						//Teste Vigilancia
 						for(j=0; j<4; j++){
@@ -430,7 +435,7 @@
 						tVigilanciaA = [0,0,0]
 
 						tVigilanciaA[i] = somaVigA[i] / somaA[i]
-						//console.log("Valida teste de vigilancia A" + i + ": " + tVigilanciaA)
+						console.log("Valida teste de vigilancia A" + i + ": " + tVigilanciaA)
 		
 					}//Fim While Vigilancia
 
@@ -460,7 +465,7 @@
 					validaMatch = [0,0,0]
 
 					validaMatch[i] = somaMt[i] / somaYb[i]
-					//console.log("Valida match tracking " + i + ": " + validaMatch)
+					console.log("Valida match tracking " + i + ": " + validaMatch)
 
 				}//Fim do while Match
 
@@ -483,10 +488,10 @@
 
 			}//Fim for art A
 
-			/*console.log("Matriz do AND A:")
+			console.log("Matriz do AND A:")
 			console.log(matA)
 			console.log("Match Tracking:")
-			console.log(mt)*/
+			console.log(mt)
 			console.log("WA Atualizado: ")
 			console.log(wa)
 			console.log("WAB Atualizado: ")
@@ -495,10 +500,220 @@
 			console.log(ya)
 
 			console.log('\n')
+			console.log('\n')
 
 			//_______________ DIAGNOSTICO _______________//
 
+			console.log("_______________ DIAGNOSTICO _______________")
 
+			fase = 1 //Ativa diagnostico
+			var pd = 0.5
+
+			var d = [ [1,1], [0.5, 1], [0.2, 0.9] ]
+			var yd = [ [0,0,0], [0,0,0], [0,0,0] ]
+			var ybd = [ [0,0,0], [0,0,0], [0,0,0] ]
+			let matD  = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
+			let somaCD = [0,0,0]
+			let somaPesoD = [0,0,0]
+			let Td = [0,0,0]
+			var fim = [0,0,0]
+
+			if(fase === 1){
+
+				//Normalização (caso valores < 0 e > 1)
+				let somaEntradaD = 0
+
+				for(i=0; i<3; i++){
+					for(j=0; j<2; j++){
+						somaEntradaD += d[i][j]
+					}
+				}
+
+				let normalizaD = false
+
+				for(i=0; i<3; i++){
+					for(j=0; j<2; j++){
+						if(d[i][j] < 0 || d[i][j] > 1){
+							normalizaD = true
+						}
+					}
+				}
+
+				if(normalizaD){
+					for(i=0; i<3; i++){
+						for(j=0; j<2; j++){
+							d[i][j] /= somaEntradaD
+						}
+					}
+				}
+
+				//Complemento (1 - d)
+				let auxD = [ [0,0], [0,0], [0,0] ]
+				let complementoD = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
+
+				for(i=0; i<3; i++){
+					for(j=0; j<2; j++){
+						auxD[i][j] = 1 - d[i][j]
+					}
+				}
+
+				for(i=0; i<3; i++){
+					for(j=0; j<2; j++){
+						complementoD[i][j] = d[i][j]
+					}
+				}
+
+				for(i=0; i<3; i++){
+					for(j=2; j<4; j++){
+						complementoD[i][j] = auxD[i][j-2]
+					}
+				}
+
+				for(i=0; i<3; i++){
+
+					//Categorias
+
+					//Prepara soma dos pesos
+					somaPesoD[0] = 0
+					somaPesoD[1] = 0
+					somaPesoD[2] = 0
+
+					//Prepara soma da matriz And
+					for(x=0; x<3; x++)
+						somaCD[x] = 0
+
+					//And Categorias
+					for(x=0; x<3; x++){
+						for(j=0; j<4; j++){
+							if(complementoD[i][j] < wa[x][j]){
+								matD[x][j] = complementoD[i][j]
+							}else{
+								matD[x][j] = wa[x][j]
+							}
+							somaCD[x] += matD[x][j]
+						}
+					}
+						
+					//Soma colunas Peso
+					for(x=0; x<3; x++){
+						for(j=0; j<4; j++){
+							somaPesoD[x] += wa[x][j]
+						}
+					}
+		
+					console.log("Soma coluna AND D: ")
+					console.log(somaCD)
+					console.log("Soma coluna peso WA: ")
+					console.log(somaPesoD)
+
+					//Cria as categorias
+					for(x=0; x<3; x++){
+						Td[x] = somaCD[x] / (alfa + somaPesoD[x])
+					}
+					console.log("Categorias criadas D: ")
+					console.log(Td)
+
+					//Encontra categoria vencedora
+					let maiorD = Math.max(...Td)
+					let D = Td.indexOf(maiorD)
+					console.log("Categoria vencedora D " + i + ": " + D)
+
+					//Teste de vigilancia
+					let vigilanciaD = [ [0,0,0,0], [0,0,0,0], [0,0,0] ]
+
+					for(j=0; j<4; j++){
+						if(complementoD[D][j] < wa[D][j]){
+							vigilanciaD[i][j] = complementoD[D][j]
+						}else{
+							vigilanciaD[i][j] = wa[D][j]
+						}
+					}
+
+					let somaVigD = [0,0,0]
+					let somaD = [0,0,0]
+
+					for(j=0; j<4; j++){
+						somaVigD[i] += vigilanciaD[i][j]
+						somaD[i] += complementoD[i][j]
+					}
+
+					let tVigilanciaD = [0,0,0]
+
+					tVigilanciaD[i] = somaVigD[i] / somaD[i]
+					console.log("Teste de vigilancia D " + i + ": " + tVigilanciaD)
+
+					//Valida Vigilancia
+					while(tVigilanciaD[i] < pd){
+						
+						//Recria categorias
+						Td[D] = 0
+						maiorD = Math.max(...Td)
+						D = Td.indexOf(maiorD)
+						console.log("Nova categoria vencedora " + i + ": " + J)
+
+						//Teste Vigilancia
+						for(j=0; j<4; j++){
+							if(complementoD[D][j] < wa[D][j]){
+								vigilanciaD[i][j] = complementoD[D][j]
+							}else{
+								vigilanciaD[i][j] = wa[D][j]
+							}
+						}
+					
+						somaVigD = [0,0,0]
+						somaD = [0,0,0]
+
+						for(j=0; j<4; j++){
+							somaVigD[i] += vigilanciaD[i][j]
+							somaD[i] += complementoD[i][j]
+						}
+
+						tVigilanciaD = [0,0,0]
+
+						tVigilanciaD[i] = somaVigD[i] / somaD[i]
+						console.log("Valida teste de vigilancia D" + i + ": " + tVigilanciaD)
+		
+					}//Fim While Vigilancia
+
+					Td = []
+
+					//Matriz de atividades (Ressonância) D
+					yd[i][D] = 1
+
+					//Matriz de Atividades inter art
+					for(j=0; j<3; j++){
+						ybd[i][j] = yd[i][j] * wab[i][j]
+					}
+
+					for(j=0; j<3; j++){
+						if(ybd[i][j] === 1){
+							fim[i] = j
+							continue
+						}
+					}
+					//console.log("Fim = " + fim)
+
+				}//Fim do for fase
+
+				//Matriz de diagnostico
+				var wbd = [ [0,0], [0,0], [0,0] ]
+
+				for(x=0; x<3; x++){
+					for(j=0; j<2; j++){
+						wbd[x][j] = wb[fim[x]][j]	
+					}
+				}
+
+			}//Fim do if fase
+
+			console.log("AND MAT D:")
+			console.log(matD)
+			console.log("Matriz de atividades D:")
+			console.log(yd)
+			console.log("Matriz de atividades Inter Art D:")
+			console.log(ybd)
+			console.log("Matriz de diagnostico D:")
+			console.log(wbd)
 
 		</script>
 	</body>
