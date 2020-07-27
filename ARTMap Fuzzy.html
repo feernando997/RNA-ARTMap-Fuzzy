@@ -7,6 +7,7 @@
 		<h2>ARTMap Fuzzy</h2>
 		<p>Parâmetros da Rede:</p>
 		<script>
+
 			//Variaveis principais
 			var i = 0
 			var j = 0
@@ -123,8 +124,23 @@
 
 		</script>
 	</head>
-
 	<body>
+		<script>
+
+			function somaColunas(linha, matriz, nmroColunas){
+				
+				let soma = 0
+
+				for(let i=0; i<Array.length; i++){
+					for(let j=0; j<nmroColunas; j++){
+						soma += matriz[linha][j]
+					}
+				}
+				
+				return soma
+			}
+
+		</script>
 		<script>
 			//_______________ ART B _______________//
 
@@ -137,18 +153,11 @@
 			let somaPesoB = [0,0,0]
 			let Tb = [0,0,0]
 			let x = 0, y = 0, k = 0
-			var posiK = new Array(0,0,0)
+			var posiK = [0,0,0]
+
+			let sum = [0,0,0]
 
 			for(i=0; i<3; i++){
-	
-				//Prepara soma dos pesos
-				somaPesoB[0] = 0
-				somaPesoB[1] = 0
-				somaPesoB[2] = 0
-
-				//Prepara soma da matriz And
-				for(x=0; x<3; x++)
-					somaCB[x] = 0
 
 				//And Categorias
 				for(x=0; x<3; x++){
@@ -158,15 +167,17 @@
 						}else{
 							matB[x][j] = wb[x][j]
 						}
-						somaCB[x] += matB[x][j]
 					}
 				}
-					
+
+				//Soma colunas AND
+				for(x=0; x<3; x++){
+					somaCB[x] = somaColunas(x, matB, 2)
+				}
+
 				//Soma colunas Peso
 				for(x=0; x<3; x++){
-					for(j=0; j<2; j++){
-						somaPesoB[x] += wb[x][j]
-					}
+					somaPesoB[x] = somaColunas(x, wb, 2)
 				}
 	
 				console.log("Soma coluna AND: ")
@@ -253,6 +264,8 @@
 				yb[i][K] = 1
 
 				Tb = []
+				somaCB = []
+				somaPesoB = []
 
 			}//Fim for art B
 				
