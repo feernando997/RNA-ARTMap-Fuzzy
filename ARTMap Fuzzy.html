@@ -51,6 +51,26 @@
 				return soma
 			}
 
+			/*function realizaAndMatrizes(entrada, peso, nmroColunas){
+
+				let resultado = []
+
+				for(let i=0; i<Array.length; i++){
+					for(let x=0; x<Array.length; x++){
+						for(let j=0; j<nmroColunas; j++){
+							if(entrada[i][j] < peso[x][j]){
+								resultado[x][j] = entrada[i][j]
+							}else{
+								resultado[x][j] = peso[x][j]
+							}
+						}
+					}
+				}
+
+				return resultado
+			}*/
+	
+
 		</script>
 		<script>
 			//Variaveis de controle da rede
@@ -519,7 +539,7 @@
 
 			var pd = 0.5
 			var d = [ [1,1], [0.5, 1], [0.2, 0.9] ]
-			var yd = [ [0,0,0], [0,0,0], [0,0,0] ]
+			var yd = [ [0,0,0], [0,0,0], [0,0,0] ] 
 			var ybd = [ [0,0,0], [0,0,0], [0,0,0] ]
 			let matD  = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
 			var wbd = [ [0,0], [0,0], [0,0] ]
@@ -550,11 +570,7 @@
 				}
 
 				if(normalizaD){
-					for(i=0; i<3; i++){
-						for(j=0; j<2; j++){
-							d[i][j] /= somaEntradaD
-						}
-					}
+					normalizaMatriz(d, 3, 2)
 				}
 
 				//Complemento (1 - d)
@@ -611,6 +627,7 @@
 					for(x=0; x<3; x++){
 						Td[x] = somaCD[x] / (alfa + somaPesoD[x])
 					}
+
 					console.log("Categorias criadas D: ")
 					console.log(Td)
 
@@ -693,8 +710,7 @@
 
 				}//Fim do for fase
 
-				//Matriz de diagnostico
-
+				//Cria matriz de diagnostico
 				for(x=0; x<3; x++){
 					for(j=0; j<2; j++){
 						wbd[x][j] = wb[fim[x]][j]	
