@@ -4,6 +4,7 @@ function normalizaMatriz(matriz, nmroLinhas, nmroColunas) {
 
 	let total = 0
 
+	//Verifica se é um vetor ou matriz
 	if (nmroLinhas == 0 || nmroLinhas == null) {
 		for (let i = 0; i < nmroColunas; i++) {
 			total += matriz[i]
@@ -44,24 +45,18 @@ function somaColunas(linha, matriz, nmroColunas) {
 
 function realizaAndMatrizes(entrada, peso, linha, nmroLinhas, nmroColunas) {
 
-	let matriz = [ [0,0], [0,0], [0,0] ] //Necessário colocar dimensões 
-	let i = 0, j = 0, x = 0
+	let matriz = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ] //Necessário colocar dimensões 
 
-	//for (i = 0; i < nmroLinhas; i++) {
-
-		for (x = 0; x < nmroLinhas; x++) {
-			for (j = 0; j < nmroColunas; j++) {
-				
-				if (entrada[linha][j] < peso[x][j]) {
-					matriz[x][j] = entrada[linha][j]
-				} else {
-					matriz[x][j] = peso[x][j]
-				}
-
+	for (let x = 0; x < nmroLinhas; x++) {
+		for (let j = 0; j < nmroColunas; j++) {
+			if (entrada[linha][j] < peso[x][j]) {
+				matriz[x][j] = entrada[linha][j]
+			} else {
+				matriz[x][j] = peso[x][j]
 			}
-		}
 
-	//}
+		}
+	}
 
 	return matriz
 }
@@ -132,7 +127,7 @@ for (i = 0; i < 3; i++) {
 //_______________ Preparação ART A _______________//
 
 var wa = [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]] //Peso 
-var a = [[1, 0], [0, 1], [1, 1]] //Entrada 
+var a = [[1, 0], [0, 1], [0.5, 0.5]] //Entrada 
 var wab = [[1, 1, 1], [1, 1, 1], [1, 1, 1]] //Peso Inter Art
 var ya = [[0, 0, 0], [0, 0, 0], [0, 0, 0]] //Matriz de atividades 
 
@@ -194,7 +189,16 @@ var posiK = [0, 0, 0] //Vetor de categoria vencedora auxiliar
 for (i = 0; i < 3; i++) {
 
 	//Categorias
-	matB = realizaAndMatrizes(complementoB, wb, i, 3, 2)
+	for (x = 0; x < 3; x++) {
+		for (j = 0; j < 2; j++) {
+			if (complementoB[i][j] < wb[x][j]) {
+				matB[x][j] = complementoB[i][j]
+			} else {
+				matB[x][j] = wb[x][j]
+			}
+		}
+	}
+	//matB = realizaAndMatrizes(complementoB, wb, i, 3, 2)
 
 	//Soma colunas AND
 	for (x = 0; x < 3; x++) {
@@ -206,23 +210,23 @@ for (i = 0; i < 3; i++) {
 		somaPesoB[x] = somaColunas(x, wb, 2)
 	}
 
-	console.log("Soma coluna AND: ")
+	/*console.log("Soma coluna AND: ")
 	console.log(somaCB)
 	console.log("Soma coluna peso WB: ")
-	console.log(somaPesoB)
+	console.log(somaPesoB)*/
 
 	//Cria as categorias
 	for (x = 0; x < 3; x++) {
 		Tb[x] = somaCB[x] / (alfa + somaPesoB[x])
 	}
 
-	console.log("Categorias criadas: ")
-	console.log(Tb)
+	//console.log("Categorias criadas: ")
+	//console.log(Tb)
 
 	//Encontra categoria vencedora
 	let maiorB = Math.max(...Tb)
 	var K = Tb.indexOf(maiorB)
-	console.log("Categoria Vencedora " + i + ": " + K)
+	//console.log("Categoria Vencedora " + i + ": " + K)
 
 	//Envia valor de K para o Art A
 	posiK[i] = K
@@ -247,7 +251,7 @@ for (i = 0; i < 3; i++) {
 	let tVigilanciaB = [0, 0, 0]
 
 	tVigilanciaB[i] = somaVigB[i] / somaB[i]
-	console.log("Teste de vigilancia " + i + ": " + tVigilanciaB)
+	//console.log("Teste de vigilancia " + i + ": " + tVigilanciaB)
 
 	//Valida vigilancia
 	while (tVigilanciaB[i] < pb) {
@@ -256,7 +260,7 @@ for (i = 0; i < 3; i++) {
 		Tb[K] = 0
 		maiorB = Math.max(...Tb)
 		K = Tb.indexOf(maiorB)
-		console.log("Nova categoria vencedora " + i + ": " + K)
+		//console.log("Nova categoria vencedora " + i + ": " + K)
 
 		//Teste de vigilancia
 		for (j = 0; j < 2; j++) {
@@ -275,7 +279,7 @@ for (i = 0; i < 3; i++) {
 		tVigilanciaB = [0, 0, 0]
 
 		tVigilanciaB[i] = somaVig[i] / somaB[i]
-		console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
+		//console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
 
 	}//Fim While
 
@@ -292,7 +296,7 @@ for (i = 0; i < 3; i++) {
 	somaPesoB = []
 
 }//Fim for art B
-
+/*
 console.log("Entrada B: ")
 console.log(complementoB)
 console.log("Matriz do AND B:")
@@ -301,9 +305,8 @@ console.log("WB Atualizado: ")
 console.log(wb)
 console.log("Matriz de Atividades B:")
 console.log(yb)
+*/
 
-/*
-console.log('\n')
 console.log('\n')
 
 //_______________ ART A _______________//
@@ -315,17 +318,9 @@ let somaPesoA = [0, 0, 0]
 let Ta = [0, 0, 0]
 
 for (i = 0; i < 3; i++) {
-
+	
 	//Categorias
-	for (x = 0; x < 3; x++) {
-		for (j = 0; j < 4; j++) {
-			if (complementoA[i][j] < wa[x][j]) {
-				matA[x][j] = complementoA[i][j]
-			} else {
-				matA[x][j] = wa[x][j]
-			}
-		}
-	}
+	matA = realizaAndMatrizes(complementoA, wa, i, 3, 4)
 
 	//Soma colunas peso
 	for (x = 0; x < 3; x++) {
@@ -356,7 +351,7 @@ for (i = 0; i < 3; i++) {
 	console.log("Categoria vencedora A " + i + ": " + J)
 
 	//Teste de vigilancia
-	let vigilanciaA = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0]]
+	let vigilanciaA = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
 	for (j = 0; j < 4; j++) {
 		if (complementoA[J][j] < wa[J][j]) {
@@ -517,7 +512,7 @@ for (i = 0; i < 3; i++) {
 
 }//Fim for art A
 
-/*console.log("Entrada A: ")
+console.log("Entrada A: ")
 console.log(complementoA)
 console.log("Matriz do AND A:")
 console.log(matA)
@@ -529,7 +524,7 @@ console.log("WAB Atualizado: ")
 console.log(wab)
 console.log("Matriz de Atividades A:")
 console.log(ya)
-
+/*
 console.log('\n')
 console.log('\n')
 
