@@ -42,18 +42,18 @@ function somaColunas(linha, matriz, nmroColunas) {
 	return soma
 }
 
-function realizaAndMatrizes(aux, entrada, peso, nmroLinhas, nmroColunas) {
+function realizaAndMatrizes(entrada, peso, linha, nmroLinhas, nmroColunas) {
 
 	let matriz = [ [0,0], [0,0], [0,0] ] //Necessário colocar dimensões 
 	let i = 0, j = 0, x = 0
 
-	for (i = 0; i < matriz.length; i++) {
+	//for (i = 0; i < nmroLinhas; i++) {
 
-		for (x = 0; x < matriz.length; x++) {
+		for (x = 0; x < nmroLinhas; x++) {
 			for (j = 0; j < nmroColunas; j++) {
 				
-				if (entrada[i][j] < peso[x][j]) {
-					matriz[x][j] = entrada[x][j]
+				if (entrada[linha][j] < peso[x][j]) {
+					matriz[x][j] = entrada[linha][j]
 				} else {
 					matriz[x][j] = peso[x][j]
 				}
@@ -61,7 +61,7 @@ function realizaAndMatrizes(aux, entrada, peso, nmroLinhas, nmroColunas) {
 			}
 		}
 
-	}
+	//}
 
 	return matriz
 }
@@ -194,15 +194,7 @@ var posiK = [0, 0, 0] //Vetor de categoria vencedora auxiliar
 for (i = 0; i < 3; i++) {
 
 	//Categorias
-	for (x = 0; x < 3; x++) {
-		for (j = 0; j < 2; j++) {
-			if (complementoB[i][j] < wb[x][j]) {
-				matB[x][j] = complementoB[i][j]
-			} else {
-				matB[x][j] = wb[x][j]
-			}
-		}
-	}
+	matB = realizaAndMatrizes(complementoB, wb, i, 3, 2)
 
 	//Soma colunas AND
 	for (x = 0; x < 3; x++) {
@@ -301,15 +293,16 @@ for (i = 0; i < 3; i++) {
 
 }//Fim for art B
 
-/*console.log("Entrada B: ")
+console.log("Entrada B: ")
 console.log(complementoB)
 console.log("Matriz do AND B:")
 console.log(matB)
 console.log("WB Atualizado: ")
 console.log(wb)
 console.log("Matriz de Atividades B:")
-console.log(yb)*/
+console.log(yb)
 
+/*
 console.log('\n')
 console.log('\n')
 
@@ -535,7 +528,7 @@ console.log(wa)
 console.log("WAB Atualizado: ")
 console.log(wab)
 console.log("Matriz de Atividades A:")
-console.log(ya)*/
+console.log(ya)
 
 console.log('\n')
 console.log('\n')
@@ -736,4 +729,5 @@ console.log(yd)
 console.log("Matriz de atividades Inter Art D:")
 console.log(ybd)
 console.log("Matriz de diagnostico D:")
-console.log(wbd)*/
+console.log(wbd)
+*/
