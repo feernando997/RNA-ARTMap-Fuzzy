@@ -1,42 +1,42 @@
 //_______________ FUNÇÕES _______________//
 
-function normalizaMatriz(matriz, nmroLinhas, nmroColunas) {
+function normalizaMatriz(entrada, nmroLinhas, nmroColunas) {
 
 	let total = 0
 
 	//Verifica se é um vetor ou matriz
 	if (nmroLinhas == 0 || nmroLinhas == null) {
 		for (let i = 0; i < nmroColunas; i++) {
-			total += matriz[i]
+			total += entrada[i]
 		}
 
 		for (let i = 0; i < nmroColunas; i++) {
-			matriz[i] /= total
+			entrada[i] /= total
 		}
 	} else {
 		for (let i = 0; i < nmroLinhas; i++) {
 			for (let j = 0; j < nmroColunas; j++) {
-				total += matriz[i][j]
+				total += entrada[i][j]
 			}
 		}
 
 		for (let i = 0; i < nmroLinhas; i++) {
 			for (let j = 0; j < nmroColunas; j++) {
-				matriz[i][j] /= total
+				entrada[i][j] /= total
 			}
 		}
 	}
 
-	return matriz
+	return entrada
 }
 
-function somaColunas(linha, matriz, nmroColunas) {
+function somaColunas(linha, entrada, nmroColunas) {
 
 	let soma = 0
 
 	for (let i = 0; i < Array.length; i++) {
 		for (let j = 0; j < nmroColunas; j++) {
-			soma += matriz[linha][j]
+			soma += entrada[linha][j]
 		}
 	}
 
@@ -45,97 +45,108 @@ function somaColunas(linha, matriz, nmroColunas) {
 
 function CriaCategorias(entrada, peso, linha, nmroLinhas, nmroColunas) {
 
-	let matriz = [ [0,0,0,0], [0,0,0,0], [0,0,0,0] ] //Necessário colocar dimensões 
+	//Verifica dimensão correta
+	if (nmroColunas === 2) {
+		var matrizCat = [[0, 0], [0, 0], [0, 0]]
+	} else {
+		var matrizCat = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+	}
 
 	for (let i = 0; i < nmroLinhas; i++) {
 		for (let j = 0; j < nmroColunas; j++) {
 			if (entrada[linha][j] < peso[i][j]) {
-				matriz[i][j] = entrada[linha][j]
+				matrizCat[i][j] = entrada[linha][j]
 			} else {
-				matriz[i][j] = peso[i][j]
+				matrizCat[i][j] = peso[i][j]
 			}
 		}
 	}
 
-	let somaColunasMat = [0,0,0]
+	let somaColunasMat = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
-		somaColunasMat[i] = somaColunas(i, matriz, nmroColunas)
+	for (let i = 0; i < nmroLinhas; i++) {
+		somaColunasMat[i] = somaColunas(i, matrizCat, nmroColunas)
 	}
 
-	let somaPeso = [0,0,0]
+	let somaPeso = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
+	for (let i = 0; i < nmroLinhas; i++) {
 		somaPeso[i] = somaColunas(i, peso, nmroColunas)
 	}
 
-	let categorias = [0,0,0]
+	let categorias = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
+	for (let i = 0; i < nmroLinhas; i++) {
 		categorias[i] = somaColunasMat[i] / (alfa + somaPeso[i])
 	}
 
 	return categorias
+
 }
 
-function realizaTesteDeVigilancia(entrada, peso, linha, catVencedora, nmroLinhas, nmroColunas){
+function realizaTesteDeVigilancia(entrada, peso, linha, catVencedora, nmroLinhas, nmroColunas) {
 
-	let matriz = [[0,0,0,0], [0,0,0,0], [0,0,0,0]] //Necessário colocar dimensões 
+	//Verifica dimensão correta
+	if(nmroColunas === 2){
+		var matrizVig = [[0, 0], [0, 0], [0, 0]]
+	}else{
+		var matrizVig = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+	}
 
-	for(let i=0; i<nmroLinhas; i++){
-		for(let j=0; j<nmroColunas; j++){
-			if(entrada[catVencedora][j] < peso[catVencedora][j]){
-				matriz[linha][j] = entrada[catVencedora][j]
-			}else{
-				matriz[linha][j] = peso[catVencedora][j]
+	for (let i = 0; i < nmroLinhas; i++) {
+		for (let j = 0; j < nmroColunas; j++) {
+			if (entrada[catVencedora][j] < peso[catVencedora][j]) {
+				matrizVig[linha][j] = entrada[catVencedora][j]
+			} else {
+				matrizVig[linha][j] = peso[catVencedora][j]
 			}
 		}
 	}
 
 	let somaVigilancia = [0, 0, 0], somaEntrada = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
-		somaVigilancia[i] = somaColunas(i, matriz, nmroColunas)
+	for (let i = 0; i < nmroLinhas; i++) {
+		somaVigilancia[i] = somaColunas(i, matrizVig, nmroColunas)
 		somaEntrada[i] = somaColunas(i, entrada, nmroColunas)
 	}
 
-	let testeDeVigilancia = [0,0,0]
+	let testeDeVigilancia = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
+	for (let i = 0; i < nmroLinhas; i++) {
 		testeDeVigilancia[i] = somaVigilancia[i] / somaEntrada[i]
 	}
-	
+
 	return testeDeVigilancia
 }
 
-function realizaMatchTracking(entrada, peso, linha, catVencedora, nmroLinhas, nmroColunas){
+function realizaMatchTracking(entrada, peso, linha, catVencedora, nmroLinhas, nmroColunas) {
 
-	let matriz = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+	let matrizMatch = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
-	for(let i=0; i<nmroLinhas; i++){
-		for(let j=0; j<nmroColunas; j++){
-			if(entrada[linha][j] < peso[catVencedora][j]){
-				matriz[linha][j] = entrada[linha][j]
-			}else{
-				matriz[linha][j] = peso[catVencedora][j]
+	for (let i = 0; i < nmroLinhas; i++) {
+		for (let j = 0; j < nmroColunas; j++) {
+			if (entrada[linha][j] < peso[catVencedora][j]) {
+				matrizMatch[linha][j] = entrada[linha][j]
+			} else {
+				matrizMatch[linha][j] = peso[catVencedora][j]
 			}
 		}
 	}
 
-	let somaColMatch = [0,0,0]
-	let somaColEntrada = [0,0,0]
+	let somaColMatch = [0, 0, 0]
+	let somaColEntrada = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
-		somaColMatch[i] = somaColunas(i, matriz, nmroColunas)
+	for (let i = 0; i < nmroLinhas; i++) {
+		somaColMatch[i] = somaColunas(i, matrizMatch, nmroColunas)
 		somaColEntrada[i] = somaColunas(i, entrada, nmroColunas)
 	}
 
-	let resMatchTracking = [0,0,0]
+	let resMatchTracking = [0, 0, 0]
 
-	for(let i=0; i<nmroLinhas; i++){
+	for (let i = 0; i < nmroLinhas; i++) {
 		resMatchTracking[i] = somaColMatch[i] / somaColEntrada[i]
 	}
-	
+
 	return resMatchTracking
 }
 
@@ -145,13 +156,13 @@ function realizaMatchTracking(entrada, peso, linha, catVencedora, nmroLinhas, nm
 var i = 0, j = 0
 var pa = 0.95, pb = 1, pab = 0.95
 var alfa = 0.1, beta = 1
-var fase = 0
+var fase = 0 //Treinamento
 
 //_______________ Preparação ART B _______________//
 
 var wb = [[1, 1], [1, 1], [1, 1]]
 var b = [1, 0, 1]
-var yb = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+var yb = [[0, 0, 0], [0, 0, 0], [0, 0, 0]] //Matriz de atividades
 
 //Normalização (caso valores < 0 ou > 1)
 let somaEntradaB = 0
@@ -233,7 +244,7 @@ for (i = 0; i < 3; i++) {
 
 for (i = 0; i < 3; i++) {
 	for (j = 2; j < 4; j++) {
-		complementoA[i][j] = auxA[i][j-2]
+		complementoA[i][j] = auxA[i][j - 2]
 	}
 }
 
@@ -241,46 +252,14 @@ for (i = 0; i < 3; i++) {
 console.log("_______________ ART B _______________")
 
 let matB = [[0, 0], [0, 0], [0, 0]] //Matriz de And Logico 
-let somaCB = [0, 0, 0] //Vetor de soma das colunas And
-let somaPesoB = [0, 0, 0] //Vetor de soma dos Pesos
 let Tb = [0, 0, 0] //Vetor de categorias
-let x = 0, y = 0, k = 0
 var posiK = [0, 0, 0] //Vetor de categoria vencedora auxiliar
+let x = 0, y = 0, k = 0
 
 for (i = 0; i < 3; i++) {
 
 	//Categorias
-	for (x = 0; x < 3; x++) {
-		for (j = 0; j < 2; j++) {
-			if (complementoB[i][j] < wb[x][j]) {
-				matB[x][j] = complementoB[i][j]
-			} else {
-				matB[x][j] = wb[x][j]
-			}
-		}
-	}
-	//matB = realizaAndMatrizes(complementoB, wb, i, 3, 2)
-
-	//Soma colunas AND
-	for (x = 0; x < 3; x++) {
-		somaCB[x] = somaColunas(x, matB, 2)
-	}
-
-	//Soma colunas Peso
-	for (x = 0; x < 3; x++) {
-		somaPesoB[x] = somaColunas(x, wb, 2)
-	}
-
-	/*console.log("Soma coluna AND: ")
-	console.log(somaCB)
-	console.log("Soma coluna peso WB: ")
-	console.log(somaPesoB)*/
-
-	//Cria as categorias
-	for (x = 0; x < 3; x++) {
-		Tb[x] = somaCB[x] / (alfa + somaPesoB[x])
-	}
-
+	Tb = CriaCategorias(complementoB, wb, i, 3, 2)
 	//console.log("Categorias criadas: ")
 	//console.log(Tb)
 
@@ -303,15 +282,7 @@ for (i = 0; i < 3; i++) {
 		}
 	}
 
-	let somaVigB = [0, 0, 0]
-	let somaB = [0, 0, 0]
-
-	somaVigB[i] = somaColunas(i, vigilanciaB, 2)
-	somaB[i] = somaColunas(i, complementoB, 2)
-
-	let tVigilanciaB = [0, 0, 0]
-
-	tVigilanciaB[i] = somaVigB[i] / somaB[i]
+	tVigilanciaB = realizaTesteDeVigilancia(complementoB, wb, i, K, 3, 2)
 	//console.log("Teste de vigilancia " + i + ": " + tVigilanciaB)
 
 	//Valida vigilancia
@@ -331,15 +302,8 @@ for (i = 0; i < 3; i++) {
 				vigilanciaB[i][j] = wb[K][j]
 			}
 		}
-		somaVigB = [0, 0, 0]
-		somaB = [0, 0, 0]
 
-		somaVigB[i] = somaColunas(i, vigilanciaB, 2)
-		somaB[i] = somaColunas(i, complementoB, 2)
-
-		tVigilanciaB = [0, 0, 0]
-
-		tVigilanciaB[i] = somaVig[i] / somaB[i]
+		tVigilanciaB = realizaTesteDeVigilancia(complementoB, wb, i, K, 3, 2)
 		//console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
 
 	}//Fim While
@@ -352,9 +316,8 @@ for (i = 0; i < 3; i++) {
 	//Matriz de Atividades B
 	yb[i][K] = 1
 
+	//Zera categorias
 	Tb = []
-	somaCB = []
-	somaPesoB = []
 
 }//Fim for art B
 /*
@@ -373,13 +336,13 @@ console.log('\n')
 //_______________ ART A _______________//
 console.log("_______________ ART A _______________")
 
-let Ta = [0,0,0]
+let Ta = [0, 0, 0]
 let J = 0
 let maiorA = 0
 let vigilanciaA = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 var mt = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 let validaMatch = [0, 0, 0]
-let tVigilanciaA = [0,0,0]
+let tVigilanciaA = [0, 0, 0]
 
 for (i = 0; i < 3; i++) {
 
@@ -515,7 +478,7 @@ let somaCD = [0, 0, 0]
 let somaPesoD = [0, 0, 0]
 let Td = [0, 0, 0]
 var fim = [0, 0, 0]
-var tVigilanciaD = [0,0,0]
+var tVigilanciaD = [0, 0, 0]
 
 if (fase === 1) {
 
@@ -560,7 +523,7 @@ if (fase === 1) {
 
 	for (i = 0; i < 3; i++) {
 		for (j = 2; j < 4; j++) {
-			complementoD[i][j] = auxD[i][j-2]
+			complementoD[i][j] = auxD[i][j - 2]
 		}
 	}
 
@@ -642,11 +605,11 @@ if (fase === 1) {
 	}
 
 	//Verifica ressonância (Saídas válidas da rede)
-	var ressonacia = [0,0,0]
+	var ressonacia = [0, 0, 0]
 
-	for(x = 0; x < 3; x++){
-		for(j = 0; j < 2; j++){
-			if(wbd[x][j] === wb[x][j]){
+	for (x = 0; x < 3; x++) {
+		for (j = 0; j < 2; j++) {
+			if (wbd[x][j] === wb[x][j]) {
 				ressonacia[x] = 1
 			}
 		}
