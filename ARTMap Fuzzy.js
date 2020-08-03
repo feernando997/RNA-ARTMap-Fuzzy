@@ -260,13 +260,13 @@ for (i = 0; i < 3; i++) {
 
 	//Categorias
 	Tb = CriaCategorias(complementoB, wb, i, 3, 2)
-	//console.log("Categorias criadas: ")
-	//console.log(Tb)
+	console.log("Categorias criadas: ")
+	console.log(Tb)
 
 	//Encontra categoria vencedora
 	let maiorB = Math.max(...Tb)
 	var K = Tb.indexOf(maiorB)
-	//console.log("Categoria Vencedora " + i + ": " + K)
+	console.log("Categoria Vencedora " + i + ": " + K)
 
 	//Envia valor de K para o Art A
 	posiK[i] = K
@@ -283,7 +283,7 @@ for (i = 0; i < 3; i++) {
 	}
 
 	tVigilanciaB = realizaTesteDeVigilancia(complementoB, wb, i, K, 3, 2)
-	//console.log("Teste de vigilancia " + i + ": " + tVigilanciaB)
+	console.log("Teste de vigilancia " + i + ": " + tVigilanciaB)
 
 	//Valida vigilancia
 	while (tVigilanciaB[i] < pb) {
@@ -292,7 +292,7 @@ for (i = 0; i < 3; i++) {
 		Tb[K] = 0
 		maiorB = Math.max(...Tb)
 		K = Tb.indexOf(maiorB)
-		//console.log("Nova categoria vencedora " + i + ": " + K)
+		console.log("Nova categoria vencedora " + i + ": " + K)
 
 		//Teste de vigilancia
 		for (j = 0; j < 2; j++) {
@@ -304,7 +304,7 @@ for (i = 0; i < 3; i++) {
 		}
 
 		tVigilanciaB = realizaTesteDeVigilancia(complementoB, wb, i, K, 3, 2)
-		//console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
+		console.log("Novo teste de vigilancia " + i + ": " + tVigilanciaB)
 
 	}//Fim While
 
@@ -320,7 +320,7 @@ for (i = 0; i < 3; i++) {
 	Tb = []
 
 }//Fim for art B
-/*
+
 console.log("Entrada B: ")
 console.log(complementoB)
 console.log("Matriz do AND B:")
@@ -329,7 +329,7 @@ console.log("WB Atualizado: ")
 console.log(wb)
 console.log("Matriz de Atividades B:")
 console.log(yb)
-*/
+
 
 console.log('\n')
 
@@ -348,13 +348,13 @@ for (i = 0; i < 3; i++) {
 
 	//Categorias
 	Ta = CriaCategorias(complementoA, wa, i, 3, 4)
-	//console.log("Categorias criadas A: ")
-	//console.log(Ta)
+	console.log("Categorias criadas A: ")
+	console.log(Ta)
 
 	//Encontra maior categoria
 	maiorA = Math.max(...Ta)
 	J = Ta.indexOf(maiorA)
-	//console.log("Categoria vencedora A " + i + ": " + J)
+	console.log("Categoria vencedora A " + i + ": " + J)
 
 	//Teste de vigilancia auxiliar para atualizar o peso
 	for (j = 0; j < 4; j++) {
@@ -367,7 +367,7 @@ for (i = 0; i < 3; i++) {
 
 	//Teste de vigilancia
 	tVigilanciaA = realizaTesteDeVigilancia(complementoA, wa, i, J, 3, 4)
-	//console.log("Teste de vigilancia A " + i + ": " + tVigilanciaA)
+	console.log("Teste de vigilancia A " + i + ": " + tVigilanciaA)
 
 	//Match tracking
 	for (x = 0; x < 3; x++) {
@@ -381,7 +381,7 @@ for (i = 0; i < 3; i++) {
 	}
 
 	validaMatch = realizaMatchTracking(yb, wab, i, J, 3, 3)
-	//console.log("Match tracking " + i + ": " + validaMatch)
+	console.log("Match tracking " + i + ": " + validaMatch)
 
 	//Valida o Match Tracking
 	while (validaMatch[i] < pab) {
@@ -390,11 +390,11 @@ for (i = 0; i < 3; i++) {
 		Ta[J] = 0
 		maiorA = Math.max(...Ta)
 		J = Ta.indexOf(maiorA)
-		//console.log("Nova categoria vencedora A " + i + ": " + J)
+		console.log("Nova categoria vencedora A " + i + ": " + J)
 
 		//Teste de vigilancia
 		tVigilanciaA = realizaTesteDeVigilancia(complementoA, wa, i, J, 3, 4)
-		//console.log("Novo teste de vigilancia A " + i + ": " + tVigilanciaA)
+		console.log("Novo teste de vigilancia A " + i + ": " + tVigilanciaA)
 
 		//Valida Vigilancia
 		while (tVigilanciaA[i] < pa) {
@@ -403,11 +403,11 @@ for (i = 0; i < 3; i++) {
 			Ta[J] = 0
 			maiorA = Math.max(...Ta)
 			J = Ta.indexOf(maiorA)
-			//console.log("Nova categoria vencedora " + i + ": " + J)
+			console.log("Nova categoria vencedora " + i + ": " + J)
 
 			//Teste Vigilancia
 			tVigilanciaA = realizaTesteDeVigilancia(complementoA, wa, i, J, 3, 4)
-			//console.log("Valida teste de vigilancia A" + i + ": " + tVigilanciaA)
+			console.log("Valida teste de vigilancia A" + i + ": " + tVigilanciaA)
 
 		}//Fim While Vigilancia
 
@@ -425,7 +425,7 @@ for (i = 0; i < 3; i++) {
 		}
 
 		validaMatch = realizaMatchTracking(yb, wab, i, J, 3, 3)
-		//console.log("Valida match tracking " + i + ": " + validaMatch)
+		console.log("Valida match tracking " + i + ": " + validaMatch)
 
 	}//Fim do while Match
 
@@ -448,7 +448,7 @@ for (i = 0; i < 3; i++) {
 	Ta = []
 
 }//Fim for art A
-/*
+
 console.log("Entrada A: ")
 console.log(complementoA)
 console.log("Match Tracking:")
@@ -458,7 +458,7 @@ console.log(wa)
 console.log("WAB Atualizado: ")
 console.log(wab)
 console.log("Matriz de Atividades A:")
-console.log(ya)*/
+console.log(ya)
 
 
 console.log('\n')
@@ -531,13 +531,13 @@ if (fase === 1) {
 
 		//Categorias
 		Td = CriaCategorias(complementoD, wa, i, 3, 4)
-		//console.log("Categorias criadas D: ")
-		//console.log(Td)
+		console.log("Categorias criadas D: ")
+		console.log(Td)
 
 		//Encontra categoria vencedora
 		let maiorD = Math.max(...Td)
 		let D = Td.indexOf(maiorD)
-		//console.log("Categoria vencedora D " + i + ": " + D)
+		console.log("Categoria vencedora D " + i + ": " + D)
 
 		//Teste de vigilancia
 		let vigilanciaD = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
@@ -551,7 +551,7 @@ if (fase === 1) {
 		}
 
 		tVigilanciaD = realizaTesteDeVigilancia(complementoD, wa, i, D, 3, 4)
-		//console.log("Teste de vigilancia D " + i + ": " + tVigilanciaD)
+		console.log("Teste de vigilancia D " + i + ": " + tVigilanciaD)
 
 		//Valida Vigilancia
 		while (tVigilanciaD[i] < pd) {
@@ -560,7 +560,7 @@ if (fase === 1) {
 			Td[D] = 0
 			maiorD = Math.max(...Td)
 			D = Td.indexOf(maiorD)
-			//console.log("Nova categoria vencedora " + i + ": " + D)
+			console.log("Nova categoria vencedora " + i + ": " + D)
 
 			//Teste Vigilancia
 			for (j = 0; j < 4; j++) {
@@ -572,7 +572,7 @@ if (fase === 1) {
 			}
 
 			tVigilanciaD = realizaTesteDeVigilancia(complementoD, wa, i, D, 3, 4)
-			//console.log("Valida teste de vigilancia D" + i + ": " + tVigilanciaD)
+			console.log("Valida teste de vigilancia D" + i + ": " + tVigilanciaD)
 
 		}//Fim While Vigilancia
 
@@ -616,7 +616,7 @@ if (fase === 1) {
 	}
 
 }//Fim do if fase
-/*
+
 console.log("Entrada D:")
 console.log(complementoD)
 console.log("Matriz de atividades D:")
@@ -626,4 +626,4 @@ console.log(ybd)
 console.log("Matriz de diagnostico D:")
 console.log(wbd)
 console.log("Categorias com ressonância:")
-console.log(ressonacia)*/
+console.log(ressonacia)
