@@ -641,6 +641,17 @@ if (fase === 1) {
 		}
 	}
 
+	//Verifica ressonância (Saídas válidas da rede)
+	var ressonacia = [0,0,0]
+
+	for(x = 0; x < 3; x++){
+		for(j = 0; j < 2; j++){
+			if(wbd[x][j] === wb[x][j]){
+				ressonacia[x] = 1
+			}
+		}
+	}
+
 }//Fim do if fase
 /*
 console.log("Entrada D:")
@@ -650,4 +661,6 @@ console.log(yd)
 console.log("Matriz de atividades Inter Art D:")
 console.log(ybd)
 console.log("Matriz de diagnostico D:")
-console.log(wbd)*/
+console.log(wbd)
+console.log("Categorias com ressonância:")
+console.log(ressonacia)*/
