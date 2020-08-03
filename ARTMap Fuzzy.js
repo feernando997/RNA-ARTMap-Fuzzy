@@ -233,7 +233,7 @@ for (i = 0; i < 3; i++) {
 
 for (i = 0; i < 3; i++) {
 	for (j = 2; j < 4; j++) {
-		complementoA[i][j] = auxA[i][j - 2]
+		complementoA[i][j] = auxA[i][j-2]
 	}
 }
 
@@ -378,8 +378,6 @@ let J = 0
 let maiorA = 0
 let vigilanciaA = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 var mt = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-let somaMt = [0, 0, 0]
-let somaYb = [0, 0, 0]
 let validaMatch = [0, 0, 0]
 let tVigilanciaA = [0,0,0]
 
@@ -499,7 +497,7 @@ console.log(wab)
 console.log("Matriz de Atividades A:")
 console.log(ya)*/
 
-/*
+
 console.log('\n')
 
 //_______________ DIAGNOSTICO _______________//
@@ -517,6 +515,7 @@ let somaCD = [0, 0, 0]
 let somaPesoD = [0, 0, 0]
 let Td = [0, 0, 0]
 var fim = [0, 0, 0]
+var tVigilanciaD = [0,0,0]
 
 if (fase === 1) {
 
@@ -545,7 +544,7 @@ if (fase === 1) {
 
 	//Complemento (1 - d)
 	let auxD = [[0, 0], [0, 0], [0, 0]]
-	let complementoD = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+	var complementoD = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
 	for (i = 0; i < 3; i++) {
 		for (j = 0; j < 2; j++) {
@@ -561,50 +560,21 @@ if (fase === 1) {
 
 	for (i = 0; i < 3; i++) {
 		for (j = 2; j < 4; j++) {
-			complementoD[i][j] = auxD[i][j - 2]
+			complementoD[i][j] = auxD[i][j-2]
 		}
 	}
 
 	for (i = 0; i < 3; i++) {
 
 		//Categorias
-		for (x = 0; x < 3; x++) {
-			for (j = 0; j < 4; j++) {
-				if (complementoD[i][j] < wa[x][j]) {
-					matD[x][j] = complementoD[i][j]
-				} else {
-					matD[x][j] = wa[x][j]
-				}
-			}
-		}
-
-		//Soma colunas do AND
-		for (x = 0; x < 3; x++) {
-			somaCD[x] = somaColunas(x, matD, 4)
-		}
-
-		//Soma colunas Peso
-		for (x = 0; x < 3; x++) {
-			somaPesoD[x] = somaColunas(x, wa, 4)
-		}
-
-		console.log("Soma coluna AND D: ")
-		console.log(somaCD)
-		console.log("Soma coluna peso WA: ")
-		console.log(somaPesoD)
-
-		//Cria as categorias
-		for (x = 0; x < 3; x++) {
-			Td[x] = somaCD[x] / (alfa + somaPesoD[x])
-		}
-
-		console.log("Categorias criadas D: ")
-		console.log(Td)
+		Td = CriaCategorias(complementoD, wa, i, 3, 4)
+		//console.log("Categorias criadas D: ")
+		//console.log(Td)
 
 		//Encontra categoria vencedora
 		let maiorD = Math.max(...Td)
 		let D = Td.indexOf(maiorD)
-		console.log("Categoria vencedora D " + i + ": " + D)
+		//console.log("Categoria vencedora D " + i + ": " + D)
 
 		//Teste de vigilancia
 		let vigilanciaD = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
@@ -617,16 +587,8 @@ if (fase === 1) {
 			}
 		}
 
-		let somaVigD = [0, 0, 0]
-		let somaD = [0, 0, 0]
-
-		somaVigD[i] = somaColunas(i, vigilanciaD, 4)
-		somaD[i] = somaColunas(i, complementoD, 4)
-
-		let tVigilanciaD = [0, 0, 0]
-
-		tVigilanciaD[i] = somaVigD[i] / somaD[i]
-		console.log("Teste de vigilancia D " + i + ": " + tVigilanciaD)
+		tVigilanciaD = realizaTesteDeVigilancia(complementoD, wa, i, D, 3, 4)
+		//console.log("Teste de vigilancia D " + i + ": " + tVigilanciaD)
 
 		//Valida Vigilancia
 		while (tVigilanciaD[i] < pd) {
@@ -635,7 +597,7 @@ if (fase === 1) {
 			Td[D] = 0
 			maiorD = Math.max(...Td)
 			D = Td.indexOf(maiorD)
-			console.log("Nova categoria vencedora " + i + ": " + D)
+			//console.log("Nova categoria vencedora " + i + ": " + D)
 
 			//Teste Vigilancia
 			for (j = 0; j < 4; j++) {
@@ -646,31 +608,20 @@ if (fase === 1) {
 				}
 			}
 
-			somaVigD = [0, 0, 0]
-			somaD = [0, 0, 0]
-
-			somaVigD[i] = somaColunas(i, vigilanciaD, 4)
-			somaD[i] = somaColunas(i, complementoD, 4)
-
-			tVigilanciaD = [0, 0, 0]
-
-			tVigilanciaD[i] = somaVigD[i] / somaD[i]
-			console.log("Valida teste de vigilancia D" + i + ": " + tVigilanciaD)
+			tVigilanciaD = realizaTesteDeVigilancia(complementoD, wa, i, D, 3, 4)
+			//console.log("Valida teste de vigilancia D" + i + ": " + tVigilanciaD)
 
 		}//Fim While Vigilancia
-
-		Td = []
-		somaCD = []
-		somaPesoD = []
 
 		//Matriz de atividades (Ressonância) D
 		yd[i][D] = 1
 
-		//Matriz de Atividades inter art
+		//Matriz de Atividades inter art 
 		for (j = 0; j < 3; j++) {
 			ybd[i][j] = yd[i][j] * wab[i][j]
 		}
 
+		//Verifica o conhecimento da rede
 		for (j = 0; j < 3; j++) {
 			if (ybd[i][j] === 1) {
 				fim[i] = j
@@ -678,9 +629,12 @@ if (fase === 1) {
 			}
 		}
 
+		//Zera categorias
+		Td = []
+
 	}//Fim do for fase
 
-	//Cria matriz de diagnostico
+	//Cria matriz de diagnóstico
 	for (x = 0; x < 3; x++) {
 		for (j = 0; j < 2; j++) {
 			wbd[x][j] = wb[fim[x]][j]
@@ -688,15 +642,12 @@ if (fase === 1) {
 	}
 
 }//Fim do if fase
-
-/*console.log("Entrada D:")
-console.log(d)
-console.log("AND MAT D:")
-console.log(matD)
+/*
+console.log("Entrada D:")
+console.log(complementoD)
 console.log("Matriz de atividades D:")
 console.log(yd)
 console.log("Matriz de atividades Inter Art D:")
 console.log(ybd)
 console.log("Matriz de diagnostico D:")
-console.log(wbd)
-*/
+console.log(wbd)*/
